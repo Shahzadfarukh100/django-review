@@ -7,7 +7,7 @@ from django.utils import timezone
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext, ugettext_lazy as _
 
-from hvad.models import TranslatableModel, TranslatedFields
+from parler.models import TranslatableModel, TranslatedFields
 
 DEFAULT_CHOICES = (
     ('5', '5'),
@@ -39,7 +39,7 @@ class Review(models.Model):
 
     """
     # GFK 'reviewed_item'
-    content_type = models.ForeignKey(ContentType)
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     reviewed_item = fields.GenericForeignKey('content_type', 'object_id')
 
@@ -47,6 +47,7 @@ class Review(models.Model):
         getattr(settings, 'AUTH_USER_MODEL', 'auth.User'),
         verbose_name=_('User'),
         blank=True, null=True,
+        on_delete=models.CASCADE
     )
 
     content = models.TextField(
@@ -80,23 +81,33 @@ class Review(models.Model):
         ContentType,
         related_name='reviews_attached',
         null=True, blank=True,
+        on_delete=models.CASCADE
     )
     extra_object_id = models.PositiveIntegerField(null=True, blank=True)
     extra_item = fields.GenericForeignKey(
         'extra_content_type', 'extra_object_id')
 
+    rating = models.ForeignKey(
+        'review.Rating',
+        verbose_name=_('Review'),
+        related_name='ratings',
+        default=None,
+        null=True, blank=True,
+        on_delete=models.CASCADE
+    )
+
     class Meta:
         ordering = ['-creation_date']
 
     def __str__(self):
-        return '{0} - {1}'.format(self.reviewed_item, self.get_user())
+        return '{0} by {1}'.format(self.reviewed_item, self.get_user())
 
     # TODO: Add magic to get ReviewExtraInfo content objects here
 
     def get_user(self):
         """Returns the user who wrote this review or ``Anonymous``."""
         if self.user:
-            return self.user.email
+            return self.user.username
         return ugettext('Anonymous')
 
     def get_averages(self, max_value=None):
@@ -200,6 +211,28 @@ class Review(models.Model):
         return True
 
 
+class Product(models.Model):
+    Desi = 'Desi'
+    FastFood = 'FastFood'
+    Pizza = 'Pizza'
+    Rice = 'Rice'
+    Chinese = 'Chinese'
+    Indian = 'Indian'
+    AVAILABLE_CHOICES = [
+        (Desi, Desi),
+        (FastFood, FastFood),
+        (Pizza, Pizza),
+        (Rice, Rice),
+        (Chinese, Chinese),
+        (Indian, Indian)
+    ]
+    product_name = models.CharField(max_length=1024)
+    product_category = models.CharField(max_length=50, choices=AVAILABLE_CHOICES)
+
+    def __str__(self):
+        return '{0}'.format(self.product_name)
+
+
 @python_2_unicode_compatible
 class ReviewExtraInfo(models.Model):
     """
@@ -229,10 +262,11 @@ class ReviewExtraInfo(models.Model):
     review = models.ForeignKey(
         'review.Review',
         verbose_name=_('Review'),
+        on_delete=models.CASCADE
     )
 
     # GFK 'content_object'
-    content_type = models.ForeignKey(ContentType)
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     content_object = fields.GenericForeignKey('content_type', 'object_id')
 
@@ -278,7 +312,7 @@ class RatingCategory(TranslatableModel):
     )
 
     def __str__(self):
-        return self.lazy_translation_getter('name', 'Untranslated')
+        return self.name
 
     @property
     def required(self):
@@ -323,6 +357,7 @@ class RatingCategoryChoice(TranslatableModel):
         RatingCategory,
         verbose_name=_('Rating category'),
         related_name='choices',
+        on_delete=models.CASCADE
     )
 
     value = models.CharField(
@@ -339,8 +374,7 @@ class RatingCategoryChoice(TranslatableModel):
     )
 
     def __str__(self):
-        return self.lazy_translation_getter('label',
-                                            self.ratingcategory.identifier)
+        return self.label
 
     class Meta:
         ordering = ('-value', )
@@ -369,11 +403,13 @@ class Rating(models.Model):
         'review.Review',
         verbose_name=_('Review'),
         related_name='ratings',
+        on_delete=models.CASCADE
     )
 
     category = models.ForeignKey(
         'review.RatingCategory',
         verbose_name=_('Category'),
+        on_delete=models.CASCADE
     )
 
     class Meta:

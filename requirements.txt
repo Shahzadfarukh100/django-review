@@ -1,5 +1,7 @@
 django
+django-parler
+djangorestframework
+django-parler-rest
 django-user-media
-django-hvad
 Pillow
 django-libs

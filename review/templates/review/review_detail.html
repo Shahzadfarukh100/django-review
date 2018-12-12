@@ -1,26 +1,155 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load review_tags %}
+{% load staticfiles %}
 
 {% block title %}{{ object }}{% endblock %}
 
 {% block main %}
-    <h1>{{ object }}</h1>
-    <h2>{% trans "Review for:" %} {{ object.reviewed_item }} ({{ object.creation_date|date:"SHORT_DATETIME_FORMAT" }})</h2>
-    {% if object.content %}
-        <h3>{{ object.get_user }} {% trans "wrote" %}:</h3>
-        <p>{{ object.content }}</p>
-    {% else %}
-        <p>{% blocktrans with user=object.get_user %}{{ user }} reviewed without description.{% endblocktrans %}</p>
-    {% endif %}
-    {% if object.ratings.all %}
-        <h3>{% trans "Ratings" %}{% if object.get_average_rating %} ({{ object.get_average_rating }} {% trans "of" %} 5){% endif %}</h3>
-        <ul>
-            {% for rating in object.ratings.all %}
-                <li>{{ rating.category }}: {{ rating.get_value_display }} {% trans "of" %} 5</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-    {% if object.user == request.user and object.is_editable %}
-        <p>{% trans "This is your own review." %} <a href="{% url "review_update" pk=review.pk %}">{% trans "Change it." %}</a></p>
-    {% endif %}
+
+    <style>
+        body {
+            padding-top: 70px;
+        }
+
+        .btn-grey {
+            background-color: #D8D8D8;
+            color: #FFF;
+        }
+
+        .rating-block {
+            background-color: #FAFAFA;
+            border: 1px solid #EFEFEF;
+            padding: 15px 15px 20px 15px;
+            border-radius: 3px;
+        }
+
+        .bold {
+            font-weight: 700;
+        }
+
+        .padding-bottom-7 {
+            padding-bottom: 7px;
+        }
+
+        .review-block {
+            background-color: #FAFAFA;
+            border: 1px solid #EFEFEF;
+            padding: 15px;
+            border-radius: 3px;
+            margin-bottom: 15px;
+        }
+
+        .review-block-name {
+            font-size: 12px;
+            margin: 10px 0;
+        }
+
+        .review-block-date {
+            font-size: 12px;
+        }
+
+        .review-block-rate {
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+
+        .review-block-title {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .review-block-description {
+            font-size: 13px;
+        }
+    </style>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+    <script src="{% static 'widget.js' %}"></script>
+    <script>gettingData({{ object.id }});</script>
+
+    <div class="container" id="form">
+
+
+
+
+
+
+
+
+
+
+
+
+
+        {#        <h4>{% trans "Review for:" %} {{ object.reviewed_item }}</h4>#}
+        {##}
+        {#        <div class="row">#}
+        {#            <div class="col-sm-4">#}
+        {#                <div class="rating-block">#}
+        {#                    <h4>Average user rating</h4>#}
+        {#                    {% total_review_average object.reviewed_item as stars %}#}
+        {#                    <h2 class="bold padding-bottom-7">{{ stars }}#}
+        {#                        <small>/ 5</small>#}
+        {#                    </h2>#}
+        {#                </div>#}
+        {#            </div>#}
+        {##}
+        {#            <div class="col-sm-4">#}
+        {#                <div class="rating-block">#}
+        {#                    <h4>Number of user has reviewed</h4>#}
+        {#                    {% get_review_count object.reviewed_item as review_count %}#}
+        {#                    <h2 class="bold padding-bottom-7">{{ review_count }}</h2>#}
+        {#                </div>#}
+        {#            </div>#}
+        {#        </div>#}
+        {##}
+        {#        <div class="row">#}
+        {#            <div class="col-sm-8">#}
+        {#                <hr/>#}
+        {#                <div class="review-block">#}
+        {#                    {% if object.content %}#}
+        {#                        <div class="row">#}
+        {#                                    <div class="col-sm-3">#}
+        {#                                        <img src="http://dummyimage.com/60x60/666/ffffff&text=No+Image" class="rounded-circle">#}
+        {#                                        <div class="review-block-name"><a href="#">{{ object.get_user }}</a></div>#}
+        {#                                        <div class="review-block-date">{{ object.creation_date }}</div>#}
+        {#                                    </div>#}
+        {#                                    <div class="col-sm-9">#}
+        {#                                        <div class="review-block-rate">#}
+{#                                                    {% if object.ratings.all %}#}
+{#                                                        {% for rating in object.ratings.all %}#}
+{#                                                            {% if rating.value %}#}
+{#                                                                {% with ''|center:rating.value as range %}#}
+{#                                                            {% for i in range %}#}
+{#                                                                <span class="text-warning fa fa-star" {{ i }}></span>#}
+{#                                                            {% endfor %}#}
+{#                                                        {% endwith %}#}
+{#                                                    {% endif %}#}
+{#                                                {% endfor %}#}
+{#                                            {% endif %}#}
+        {##}
+        {#                                    {% if object.user == request.user and object.is_editable %}#}
+        {#                                        <div class="float-right">#}
+        {#                                            <a href="{% url "review_update" pk=review.pk %}"#}
+        {#                                               class="text-info fa fa-edit"></a>#}
+        {#                                            <a href="{% url "review_delete" pk=review.pk %}"#}
+        {#                                               class="text-info fa fa-trash"></a>#}
+        {#                                        </div>#}
+        {#                                    {% endif %}#}
+        {#                                </div>#}
+        {#                                <div class="review-block-description">#}
+        {#                                    {{ object.content }}#}
+        {#                                </div>#}
+        {#                            </div>#}
+        {#                        </div>#}
+        {#                        <hr/>#}
+        {#                    {% endif %}#}
+        {#                </div>#}
+        {#            </div>#}
+        {#        </div>#}
+    </div>
+
 {% endblock %}

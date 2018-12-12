@@ -1,14 +1,12 @@
 """Settings that need to be set in order to run the tests."""
 import os
 
-
 DEBUG = True
 
 SITE_ID = 1
 
 APP_ROOT = os.path.abspath(
     os.path.join(os.path.dirname(__file__), '..'))
-
 
 DATABASES = {
     'default': {
@@ -20,10 +18,10 @@ DATABASES = {
 ROOT_URLCONF = 'review.tests.urls'
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(APP_ROOT, '../app_static')
+# STATIC_ROOT = os.path.join(APP_ROOT, '../static')
 MEDIA_ROOT = os.path.join(APP_ROOT, '../app_media')
 STATICFILES_DIRS = (
-    os.path.join(APP_ROOT, 'static'),
+    os.path.join(APP_ROOT, '../static'),
 )
 
 TEMPLATES = [{
@@ -52,9 +50,10 @@ EXTERNAL_APPS = [
     'django.contrib.sitemaps',
     'django.contrib.sites',
     'generic_positions',
-    'hvad',
+    'parler',
     'user_media',
     'easy_thumbnails',
+    'rest_framework',
 ]
 
 INTERNAL_APPS = [
@@ -66,7 +65,7 @@ INSTALLED_APPS = EXTERNAL_APPS + INTERNAL_APPS
 
 SECRET_KEY = 'foobar'
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -74,5 +73,12 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
+
+REST_FRAMEWORK = {
+    'DATETIME_FORMAT': "%Y-%m-%d, %H:%M:%S",
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    )
+}
 
 REVIEW_FORM_CHOICE_WIDGET = 'django.forms.widgets.RadioSelect'

@@ -2,7 +2,7 @@
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 
-from hvad.admin import TranslatableAdmin
+from parler.admin import TranslatableAdmin
 
 from . import models
 
@@ -34,3 +34,4 @@ admin.site.register(models.RatingCategory, TranslatableAdmin)
 admin.site.register(models.Review, ReviewAdmin)
 admin.site.register(models.ReviewExtraInfo, ReviewExtraInfoAdmin)
 admin.site.register(models.RatingCategoryChoice, ReviewCategoryChoiceAdmin)
+admin.site.register(models.Product)

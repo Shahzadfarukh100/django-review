@@ -4,9 +4,11 @@
 {% block title %}{% trans "Delete review" %}{% endblock %}
 
 {% block main %}
-    <h1>{% trans "Delete review" %}</h1>
-    <form method="post" action=".">
-        {% csrf_token %}
-        <input type="submit" value="{% trans "Delete" %}" />
-    </form>
+    <br><br><br><div class="container">
+        <h1>{% trans "Delete review" %}</h1>
+        <form method="post" action="">
+            {% csrf_token %}
+            <input type="submit" class="btn btn-md btn-outline-secondary" value="{% trans "Delete" %}" />
+        </form>
+    </div>
 {% endblock %}
