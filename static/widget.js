@@ -11,25 +11,37 @@ function gettingData(id) {
 
                 let h = document.createElement("div");
                 h.textContent = data.user;
-                h.className = 'review-block-name';
+                h.style.fontSize = '12px';
+                h.style.margin = '10px';
 
                 let z = document.createElement('div');
                 z.textContent = data.creation_date;
-                z.className = 'review-block-date';
+                z.style.fontSize = '12px';
 
                 let ratings = document.createElement('div');
-                ratings.className = 'review-block-rate ';
-                for (var i = 0; i<data.rating; i++) {
+                ratings.style.fontSize = '13px';
+                ratings.style.marginBottom = '8px';
+                for (let i = 0; i<data.rating; i++) {
                     ratings.innerHTML += '<i class="text-warning fa fa-star"> </i>';
                 }
 
+                let edit = document.createElement('a');
+                edit.className = 'float-right text-info fa fa-edit';
+                edit.href = 'http://127.0.0.1:8000/review/'+id+'/update';
+
+                let del = document.createElement('a');
+                del.className = 'float-right text-info fa fa-trash';
+                del.href = 'http://127.0.0.1:8000/review/'+id+'/delete';
+
 
                 let c = document.createElement('div');
-                c.className = 'review-block-description';
+                c.style.fontSize = '13px';
                 c.textContent = data.content;
 
                 let r = document.createElement('div');
                 r.className = 'col-sm-9';
+                r.appendChild(del);
+                r.appendChild(edit);
                 r.appendChild(ratings);
                 r.appendChild(c);
 
@@ -46,13 +58,18 @@ function gettingData(id) {
 
                 let col1 = document.createElement('div');
                 col1.className = 'col-sm-8';
+                col1.style.backgroundColor = '#FAFAFA';
+                col1.style.border = '1px solid #EFEFEF';
+                col1.style.padding = '15px';
+                col1.style.borderRadius = '3px';
+                col1.style.marginBottom = '15px';
                 col1.appendChild(row);
 
                 let row1 = document.createElement('div');
-                row1.className = 'row review-block';
+                row1.className = 'row';
                 row1.appendChild(col1);
 
-                $("#form").html(row1);
+                $("#myWidget").html(row1);
             }
         );
 }
