@@ -3,6 +3,7 @@ function gettingData(id) {
         type: "GET",
         url: "http://127.0.0.1:8000/api/review/" + id,
     })
+
         .done(function (data) {
 
                 let x = document.createElement('img');
@@ -10,7 +11,7 @@ function gettingData(id) {
                 x.className = 'rounded-circle';
 
                 let h = document.createElement("div");
-                h.textContent = data.user;
+                h.textContent = data.username;
                 h.style.fontSize = '12px';
                 h.style.margin = '10px';
 
@@ -21,17 +22,17 @@ function gettingData(id) {
                 let ratings = document.createElement('div');
                 ratings.style.fontSize = '13px';
                 ratings.style.marginBottom = '8px';
-                for (let i = 0; i<data.rating; i++) {
+                for (let i = 0; i < data.average_rating; i++) {
                     ratings.innerHTML += '<i class="text-warning fa fa-star"> </i>';
                 }
 
                 let edit = document.createElement('a');
                 edit.className = 'float-right text-info fa fa-edit';
-                edit.href = 'http://127.0.0.1:8000/review/'+id+'/update';
+                edit.href = 'http://127.0.0.1:8000/review/' + id + '/update';
 
                 let del = document.createElement('a');
                 del.className = 'float-right text-info fa fa-trash';
-                del.href = 'http://127.0.0.1:8000/review/'+id+'/delete';
+                del.href = 'http://127.0.0.1:8000/review/' + id + '/delete';
 
 
                 let c = document.createElement('div');
@@ -69,7 +70,15 @@ function gettingData(id) {
                 row1.className = 'row';
                 row1.appendChild(col1);
 
-                $("#myWidget").html(row1);
+                let nm = document.createElement('h5');
+                nm.textContent = data.name;
+
+                let con = document.createElement('div');
+                con.className = 'container';
+                con.appendChild(nm);
+                con.appendChild(row1);
+
+                $("#myWidget").html(con);
             }
         );
 }

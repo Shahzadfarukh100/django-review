@@ -87,15 +87,6 @@ class Review(models.Model):
     extra_item = fields.GenericForeignKey(
         'extra_content_type', 'extra_object_id')
 
-    rating = models.ForeignKey(
-        'review.Rating',
-        verbose_name=_('Review'),
-        related_name='ratings',
-        default=None,
-        null=True, blank=True,
-        on_delete=models.CASCADE
-    )
-
     class Meta:
         ordering = ['-creation_date']
 
@@ -159,7 +150,7 @@ class Review(models.Model):
                 category_average *= float(max_rating_value) / float(
                     category_max)
                 category_averages[category] = (
-                    category_average / ratings.count())
+                        category_average / ratings.count())
 
         # calculate the total average of all categories
         total_average = 0
@@ -377,7 +368,7 @@ class RatingCategoryChoice(TranslatableModel):
         return self.label
 
     class Meta:
-        ordering = ('-value', )
+        ordering = ('-value',)
 
 
 @python_2_unicode_compatible

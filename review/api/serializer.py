@@ -7,8 +7,8 @@ class ReviewSerializer(serializers.ModelSerializer):
     url = serializers.HyperlinkedIdentityField(
         view_name='review-rud'
     )
-    user = serializers.ReadOnlyField(source='user.username')
-    rating = serializers.ReadOnlyField(source='rating.value')
+    name = serializers.ReadOnlyField(source='__str__')
+    username = serializers.ReadOnlyField(source='get_user')
 
     class Meta:
         model = Review
