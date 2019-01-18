@@ -1,6 +1,14 @@
 from ..models import Review, Rating, RatingCategory
 from rest_framework import serializers
 from parler_rest.serializers import TranslatableModelSerializer, TranslatedFieldsField
+from allauth.socialaccount.models import SocialAccount
+
+
+class SocialSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = SocialAccount
+        fields = '__all__'
 
 
 class ReviewSerializer(serializers.ModelSerializer):
@@ -9,6 +17,7 @@ class ReviewSerializer(serializers.ModelSerializer):
     )
     name = serializers.ReadOnlyField(source='__str__')
     username = serializers.ReadOnlyField(source='get_user')
+    image = serializers.ReadOnlyField(source='user.socialaccount_set.first.extra_data.avatar_url')
 
     class Meta:
         model = Review

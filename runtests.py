@@ -19,7 +19,7 @@ if __name__ == '__main__':
           ' --pattern="*_tests.py"')
     local('coverage html -d coverage --omit="*__init__*,*/settings/*,'
           '*/migrations/*,*/south_migrations/*,*/tests/*,*admin*"')
-    total_line = local('grep -n pc_cov coverage/index.html', capture=True)
+    total_line = local('grep -n pc_cov coverage/login.html', capture=True)
     percentage = float(re.findall(r'(\d+)%', total_line)[-1])
     if percentage < 100:
         warn(red('Coverage is {0}%'.format(percentage)))

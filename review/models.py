@@ -218,6 +218,8 @@ class Product(models.Model):
         (Indian, Indian)
     ]
     product_name = models.CharField(max_length=1024)
+    product_image = models.FileField(blank=True, null=True)
+    product_description = models.CharField(max_length=1000, blank=True, null=True)
     product_category = models.CharField(max_length=50, choices=AVAILABLE_CHOICES)
 
     def __str__(self):

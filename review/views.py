@@ -1,6 +1,7 @@
 """Views for the review app."""
 import importlib
 
+from allauth.socialaccount.models import SocialAccount
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
@@ -8,13 +9,28 @@ from django.urls import reverse
 from django.db.models import ObjectDoesNotExist
 from django.http import Http404, HttpResponseRedirect
 from django.utils import timezone
-from django.views.generic import CreateView, DeleteView, DetailView, UpdateView
-
+from django.views.generic import CreateView, DeleteView, DetailView, UpdateView, ListView, TemplateView
 from .forms import ReviewForm
-from .models import Review
+from .models import Review, Product
+import allauth.account.views
 
 
 # ------ MIXINS ------ #
+
+
+class LogoutView(allauth.account.views.LogoutView):
+    template_name = 'review/logout.html'
+
+
+class ProductView(ListView):
+    model = Product
+    template_name = 'review/product_list.html'
+
+
+class ProductDetailView(DetailView):
+    model = Product
+    template_name = 'review/product_detail.html'
+
 
 class ReviewViewMixin(object):
     model = Review
@@ -117,10 +133,21 @@ class ReviewDetailView(DetailView):
     """View to display a ``Review`` instance."""
     model = Review
 
+    def get_context_data(self, **kwargs):
+        context = super(ReviewDetailView, self).get_context_data(**kwargs)
+        socialaccount_obj = SocialAccount.objects.filter(user_id=self.object.user_id)
+
+        if len(socialaccount_obj):
+            context['picture'] = socialaccount_obj[0].extra_data['avatar_url']
+        return context
+
 
 class ReviewUpdateView(ReviewViewMixin, ReviewUpdateMixin, UpdateView):
     """View to update a ``Review`` instance."""
-    pass
+    def get_success_url(self):
+        if getattr(settings, 'REVIEW_UPDATE_SUCCESS_URL', False):
+                return reverse(settings.REVIEW_UPDATE_SUCCESS_URL)
+        return '/'
 
 
 class ReviewDeleteView(ReviewViewMixin, ReviewUpdateMixin, DeleteView):

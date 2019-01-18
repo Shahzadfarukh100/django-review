@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load staticfiles %}
+
+
+{% block title %}{{ product }}{% endblock %}
+
+{% block styles %}
+    <style>
+        .test {
+            width: 50px;
+            height: auto;
+        }
+    </style>
+{% endblock %}
+
+{% block main %}
+    <br><br><br>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-header btn-outline-secondary">
+                        {{ product.product_name }}
+                    </div>
+                    <img class="card-img-top" src="{{ product.product_image.url }}" alt="Card image cap">
+                </div>
+            </div>
+
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-header btn-outline-secondary">
+                        Description
+                    </div>
+                    <div class="card-body">
+                        {{ product.product_description }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br><br>
+    {% if not user.is_authenticated %}
+        {% load socialaccount %}
+        <div class="container">
+            <div class="card">
+                <div class="card-header btn-outline-secondary">
+                    Want to give a review ??
+                </div>
+                <div class="card-body">
+                    <a href="{% provider_login_url 'github' %}"
+                       class="btn btn-success btn-block btn-github btn-lg"><span
+                            class="fa fa-github"></span> Sign in with Github</a>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="container">
+            <div class="card">
+                <div class="card-header btn-outline-secondary">
+                    Write a review
+                </div>
+                <div class="card-body">
+                    <a href="http://127.0.0.1:8000/product/{{ product.id }}/create/"
+                       class="btn btn-success btn-block btn-github btn-lg"><span></span> Create Review</a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    <br><br>
+
+    <div id="myWidget"></div>
+    <script src="{% static 'widget.js' %}"></script>
+    <script>
+        let person = "{{ user.username }}";
+        let product_name = "{{ product.product_name }} ";
+        gettingData();
+    </script>
+
+
+{% endblock %}

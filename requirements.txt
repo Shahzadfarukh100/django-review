@@ -2,6 +2,7 @@ django
 django-parler
 djangorestframework
 django-parler-rest
+django-allauth
 django-user-media
 Pillow
 django-libs
