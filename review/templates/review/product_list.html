@@ -3,6 +3,15 @@
 
 {% block title %}{% trans "Products" %}{% endblock %}
 
+{% block styles %}
+    <style>
+        .img {
+            width: 100px;
+            height: 300px;
+        }
+    </style>
+{% endblock %}
+
 {% block main %}
     <br><br><br>
     <div class="container">
@@ -14,9 +23,11 @@
                         <div class="card-header btn-outline-secondary">
                             {{ product.product_name }}
                         </div>
-                        <img class="card-img-top" src="{{ product.product_image.url }}" alt="Card image cap">
+                        <img class="card-img-top img" src="{{ product.product_image.url }}"
+                             alt="Card image cap">
                         <div class="card-body">
-                            <a href="{% url 'product_detail' product.id %}" class="btn btn-primary float-right">Detail</a>
+                            <a href="{% url 'product_detail' product.id %}"
+                               class="btn btn-primary float-right">Detail</a>
                         </div>
                     </div>
                 </div>

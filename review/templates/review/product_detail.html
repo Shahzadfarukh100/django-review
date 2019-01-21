@@ -11,6 +11,11 @@
             width: 50px;
             height: auto;
         }
+
+        .img {
+            width: 100px;
+            height: 200px;
+        }
     </style>
 {% endblock %}
 
@@ -24,7 +29,7 @@
                     <div class="card-header btn-outline-secondary">
                         {{ product.product_name }}
                     </div>
-                    <img class="card-img-top" src="{{ product.product_image.url }}" alt="Card image cap">
+                    <img class="card-img-top img" src="{{ product.product_image.url }}" alt="Card image cap">
                 </div>
             </div>
 
