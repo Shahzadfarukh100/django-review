@@ -5,10 +5,11 @@ from .views import (ReviewRUDView,
                     RatingListCreateView,
                     RatingCategoryRUDView,
                     RatingCategoryListCreateView,
-                    SocialAccountListCreateView
+                    SocialAccountListCreateView,
                     )
 
 urlpatterns = [
+
     url(r'social/$', SocialAccountListCreateView.as_view(), name='social-create-list'),
 
     url(r'review/(?P<pk>[0-9]+)$', ReviewRUDView.as_view(), name='review-rud'),

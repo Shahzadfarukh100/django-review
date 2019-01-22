@@ -4,7 +4,7 @@ from parler_rest.serializers import TranslatableModelSerializer, TranslatedField
 from allauth.socialaccount.models import SocialAccount
 
 
-class SocialSerializer(serializers.ModelSerializer):
+class SocialAccountSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SocialAccount

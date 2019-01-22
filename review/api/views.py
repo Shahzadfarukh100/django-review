@@ -1,11 +1,16 @@
 from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListCreateAPIView
-from .serializer import ReviewSerializer, RatingSerializer, RatingCategorySerializer, SocialSerializer
+from .serializer import (
+    ReviewSerializer,
+    RatingSerializer,
+    RatingCategorySerializer,
+    SocialAccountSerializer,
+)
 from ..models import Review, Rating, RatingCategory
 from allauth.socialaccount.models import SocialAccount
 
 
 class SocialAccountListCreateView(ListCreateAPIView):
-    serializer_class = SocialSerializer
+    serializer_class = SocialAccountSerializer
     queryset = SocialAccount.objects.all()
 
 
